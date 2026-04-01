@@ -48,7 +48,12 @@ function verify() {
 
     let user = Telegram.WebApp.initDataUnsafe.user;
 
-    fetch("/verify", {
+    if (!user) {
+        alert("❌ Open inside Telegram bot");
+        return;
+    }
+
+    fetch("https://YOUR-DOMAIN.com/verify", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -65,10 +70,10 @@ function verify() {
             statusDiv.innerHTML = "✅ Verified Successfully";
         }
         else if (data.status === "info") {
-            statusDiv.innerHTML = "✔️ Already Verified (Same Device)";
+            statusDiv.innerHTML = "✔️ Already Verified";
         }
         else {
-            statusDiv.innerHTML = "🚫 Different Device Detected";
+            statusDiv.innerHTML = "🚫 Different Device";
         }
 
         setTimeout(() => {
