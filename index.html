@@ -1,35 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Secure Verification</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <style>
-    body {
-      background: #0f172a;
-      color: white;
-      text-align: center;
-      font-family: Arial;
-    }
-    .box { margin-top: 120px; }
-    button {
-      padding: 15px 30px;
-      border-radius: 12px;
-      border: none;
-      background: #22c55e;
-      color: white;
-      font-size: 18px;
-    }
-  </style>
-</head>
-
-<body>
-
-<div class="box">
-  <h2>🔐 Secure Device Verification</h2>
-  <button onclick="verify()">Verify Now</button>
-  <div id="status"></div>
-</div>
+<button onclick="verify()">Verify Now</button>
+<div id="status"></div>
 
 <script>
 Telegram.WebApp.ready();
@@ -40,11 +12,12 @@ function verify() {
     let user = Telegram.WebApp.initDataUnsafe.user;
 
     if (!user) {
-        alert("❌ Open inside Telegram");
+        alert("❌ Please open inside Telegram bot");
         return;
     }
 
-    status.innerHTML = "⏳ Verifying...";
+    let statusDiv = document.getElementById("status");
+    statusDiv.innerHTML = "⏳ Verifying...";
 
     fetch("/api/verify", {
         method: "POST",
@@ -55,17 +28,19 @@ function verify() {
     .then(data => {
 
         if (data.status === "success") {
-            status.innerHTML = "✅ Verified";
-        } else if (data.status === "info") {
-            status.innerHTML = "✔️ Already Verified";
-        } else {
-            status.innerHTML = "🚫 Different Device";
+            statusDiv.innerHTML = "✅ " + data.message;
+        }
+        else if (data.status === "info") {
+            statusDiv.innerHTML = "✔️ " + data.message;
+        }
+        else {
+            statusDiv.innerHTML = "❌ " + data.message;
         }
 
-        setTimeout(() => Telegram.WebApp.close(), 1500);
+        setTimeout(() => Telegram.WebApp.close(), 2000);
+    })
+    .catch(err => {
+        statusDiv.innerHTML = "❌ Network Error: " + err.message;
     });
 }
 </script>
-
-</body>
-</html>
