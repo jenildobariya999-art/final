@@ -1,34 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Secure Verification</title>
+  <title>Verification</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
     body {
-      background: #0f172a;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
       color: white;
       text-align: center;
       font-family: Arial;
     }
-    .box { margin-top: 120px; }
+    .box {
+      margin-top: 120px;
+    }
     button {
-      padding: 15px 30px;
-      border-radius: 12px;
+      padding: 15px 40px;
+      border-radius: 14px;
       border: none;
       background: #22c55e;
       color: white;
       font-size: 18px;
+      box-shadow: 0 0 20px #22c55e;
     }
-    #status { margin-top: 20px; }
+    #status {
+      margin-top: 20px;
+      font-size: 16px;
+    }
   </style>
 </head>
 
 <body>
 
 <div class="box">
-  <h2>🔐 Secure Device Verification</h2>
+  <h2>🔐 Secure Verification</h2>
+  <p>Click below to continue</p>
+
   <button onclick="verify()">Verify Now</button>
+
   <div id="status"></div>
 </div>
 
@@ -41,43 +50,31 @@ function verify() {
     let user = Telegram.WebApp.initDataUnsafe.user;
 
     if (!user) {
-        alert("❌ Please open inside Telegram bot");
+        alert("❌ Open in Telegram");
         return;
     }
 
-    let statusDiv = document.getElementById("status");
-    statusDiv.innerHTML = "⏳ Verifying...";
+    let status = document.getElementById("status");
+    status.innerHTML = "⏳ Verifying...";
 
-    fetch("https://final-eta-ashy.vercel.app/api/verify", {
+    fetch("/verify", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ id: user.id })
     })
-    .then(async res => {
-        let text = await res.text();
-
-        try {
-            return JSON.parse(text);
-        } catch {
-            throw new Error("Invalid JSON: " + text);
-        }
-    })
+    .then(res => res.json())
     .then(data => {
 
         if (data.status === "success") {
-            statusDiv.innerHTML = "✅ " + data.message;
-        }
-        else if (data.status === "info") {
-            statusDiv.innerHTML = "✔️ " + data.message;
-        }
-        else {
-            statusDiv.innerHTML = "❌ " + data.message;
+            status.innerHTML = "✅ Verified Successfully";
+        } else {
+            status.innerHTML = "❌ " + data.message;
         }
 
-        setTimeout(() => Telegram.WebApp.close(), 2000);
+        setTimeout(() => Telegram.WebApp.close(), 1500);
     })
-    .catch(err => {
-        statusDiv.innerHTML = "❌ Error: " + err.message;
+    .catch(() => {
+        status.innerHTML = "❌ Network Error";
     });
 }
 </script>
