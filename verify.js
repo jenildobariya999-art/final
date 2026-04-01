@@ -1,9 +1,12 @@
-import { getUser, saveUser } from "./data.js"
+let users = {}
 
 export default async function handler(req, res) {
 
   if (req.method !== "POST") {
-    return res.status(405).json({ status: "error", message: "Method not allowed" })
+    return res.status(405).json({
+      status: "error",
+      message: "Method not allowed"
+    })
   }
 
   try {
@@ -31,25 +34,23 @@ export default async function handler(req, res) {
 
     const fingerprint = ip + "_" + ua
 
-    const existing = getUser(id)
-
-    // 🟡 SAME DEVICE
-    if (existing && existing === fingerprint) {
+    // SAME DEVICE
+    if (users[id] && users[id] === fingerprint) {
       return res.status(200).json({
         status: "info",
-        message: "Already Verified"
+        message: "Already Verified (Same Device)"
       })
     }
 
-    // 🔴 DIFFERENT DEVICE
-    if (existing && existing !== fingerprint) {
+    // DIFFERENT DEVICE
+    if (users[id] && users[id] !== fingerprint) {
 
       await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
           chat_id: id,
-          text: "🚫 Different device detected! Access denied."
+          text: "🚫 Different device detected!"
         })
       })
 
@@ -59,8 +60,8 @@ export default async function handler(req, res) {
       })
     }
 
-    // 🟢 NEW USER
-    saveUser(id, fingerprint)
+    // NEW USER
+    users[id] = fingerprint
 
     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
