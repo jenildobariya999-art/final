@@ -4,18 +4,25 @@ export default async function handler(req, res) {
     return res.status(200).json({ status: "ok" });
   }
 
-  const { id } = req.body;
-
-  const BOT_TOKEN = process.env.BOT_TOKEN;
-
-  if (!id) {
-    return res.status(400).json({
-      status: "error",
-      message: "User ID missing"
-    });
-  }
-
   try {
+
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        status: "error",
+        message: "User ID missing"
+      });
+    }
+
+    const BOT_TOKEN = process.env.BOT_TOKEN;
+
+    if (!BOT_TOKEN) {
+      return res.status(500).json({
+        status: "error",
+        message: "Bot token not set"
+      });
+    }
 
     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
@@ -32,9 +39,10 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
+
     return res.status(500).json({
       status: "error",
-      message: "Server Error"
+      message: "Server Error: " + err.message
     });
   }
 }
