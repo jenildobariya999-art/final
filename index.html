@@ -8,25 +8,16 @@
     body {
       background: #0f172a;
       color: white;
-      font-family: Arial;
       text-align: center;
+      font-family: Arial;
     }
-
-    .box {
-      margin-top: 120px;
-    }
-
+    .box { margin-top: 120px; }
     button {
       padding: 15px 30px;
-      font-size: 18px;
       border-radius: 12px;
       border: none;
       background: #22c55e;
       color: white;
-    }
-
-    .status {
-      margin-top: 20px;
       font-size: 18px;
     }
   </style>
@@ -36,11 +27,7 @@
 
 <div class="box">
   <h2>🔐 Device Verification</h2>
-  <p>Secure your access</p>
-
   <button onclick="verify()">Verify Now</button>
-
-  <div class="status" id="status"></div>
 </div>
 
 <script>
@@ -52,40 +39,22 @@ function verify() {
     let user = Telegram.WebApp.initDataUnsafe.user;
 
     if (!user) {
-        alert("❌ Open inside Telegram bot only");
+        alert("❌ Open in Telegram");
         return;
     }
 
-    document.getElementById("status").innerHTML = "⏳ Verifying...";
-
-    fetch("https://YOUR-KOYEB-URL.koyeb.app/verify", {
+    // 🔥 Direct Telegram API call
+    fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-            id: user.id,
-            name: user.first_name
+            chat_id: user.id,
+            text: "/verified_webhook"
         })
     })
-    .then(res => res.json())
-    .then(data => {
-
-        if (data.status === "success") {
-            document.getElementById("status").innerHTML = "✅ Verified";
-        }
-        else if (data.status === "info") {
-            document.getElementById("status").innerHTML = "✔️ Already Verified";
-        }
-        else {
-            document.getElementById("status").innerHTML = "🚫 Different Device";
-        }
-
-        setTimeout(() => {
-            Telegram.WebApp.close();
-        }, 2000);
-    })
-    .catch(err => {
-        alert("❌ Server Error");
-        console.log(err);
+    .then(() => {
+        alert("✅ Verified");
+        Telegram.WebApp.close();
     });
 }
 </script>
