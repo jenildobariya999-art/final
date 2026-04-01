@@ -44,16 +44,21 @@
 </div>
 
 <script>
+Telegram.WebApp.ready();
+Telegram.WebApp.expand();
+
 function verify() {
 
     let user = Telegram.WebApp.initDataUnsafe.user;
 
     if (!user) {
-        alert("❌ Open inside Telegram bot");
+        alert("❌ Open inside Telegram bot only");
         return;
     }
 
-    fetch("https://YOUR-DOMAIN.com/verify", {
+    document.getElementById("status").innerHTML = "⏳ Verifying...";
+
+    fetch("https://YOUR-KOYEB-URL.koyeb.app/verify", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -64,21 +69,23 @@ function verify() {
     .then(res => res.json())
     .then(data => {
 
-        let statusDiv = document.getElementById("status");
-
         if (data.status === "success") {
-            statusDiv.innerHTML = "✅ Verified Successfully";
+            document.getElementById("status").innerHTML = "✅ Verified";
         }
         else if (data.status === "info") {
-            statusDiv.innerHTML = "✔️ Already Verified";
+            document.getElementById("status").innerHTML = "✔️ Already Verified";
         }
         else {
-            statusDiv.innerHTML = "🚫 Different Device";
+            document.getElementById("status").innerHTML = "🚫 Different Device";
         }
 
         setTimeout(() => {
             Telegram.WebApp.close();
         }, 2000);
+    })
+    .catch(err => {
+        alert("❌ Server Error");
+        console.log(err);
     });
 }
 </script>
