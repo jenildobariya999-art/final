@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verification</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      background: #0f172a;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+    }
+
+    .box {
+      margin-top: 120px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 12px;
+      border: none;
+      background: #22c55e;
+      color: white;
+    }
+
+    .loader {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🔐 Device Verification</h2>
+  <p>Secure your access</p>
+
+  <button onclick="verify()">Verify Now</button>
+
+  <div class="loader" id="loader">⏳ Verifying...</div>
+</div>
+
+<script>
+function verify() {
+    document.getElementById("loader").style.display = "block";
+
+    let user = Telegram.WebApp.initDataUnsafe.user;
+
+    fetch("/verify", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            id: user.id,
+            name: user.first_name
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        Telegram.WebApp.close();
+    });
+}
+</script>
+
+</body>
+</html>
