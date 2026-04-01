@@ -7,10 +7,10 @@ app = Flask(__name__)
 BOT_TOKEN = "8645066724:AAFwkbpnQDmpAjEf-lf-3nraM-A72Q9pd8Q"
 API = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
-# Store verified devices (temporary memory)
+# Store verified devices
 verified_devices = {}
 
-# Serve frontend
+# 🌐 Serve frontend
 @app.route("/")
 def index():
     return send_from_directory(".", "index.html")
@@ -24,31 +24,49 @@ def verify():
     user_id = str(data.get("id"))
     name = data.get("name")
 
-    # 🔥 DEVICE FINGERPRINT (IMPORTANT PART)
+    # 🔥 DEVICE FINGERPRINT
     fingerprint = hashlib.md5(
         (request.remote_addr + request.headers.get("User-Agent")).encode()
     ).hexdigest()
 
-    # 🚫 Check multiple device
+    # 🟡 Already verified same device
     if user_id in verified_devices:
-        if verified_devices[user_id] != fingerprint:
-            return jsonify({
-                "status": "error",
-                "message": "Multiple devices detected 🚫"
+        if verified_devices[user_id] == fingerprint:
+
+            # Send Telegram message
+            requests.post(f"{API}/sendMessage", json={
+                "chat_id": user_id,
+                "text": "✔️ Already Verified on this device"
             })
 
-    # ✅ Save fingerprint
+            return jsonify({
+                "status": "info",
+                "message": "Already Verified ✅ (Same Device)"
+            })
+
+        else:
+            # 🔴 Different device detected
+            requests.post(f"{API}/sendMessage", json={
+                "chat_id": user_id,
+                "text": "🚫 Multiple Devices Detected! Access Denied."
+            })
+
+            return jsonify({
+                "status": "error",
+                "message": "Different Device Detected 🚫"
+            })
+
+    # 🟢 New verification
     verified_devices[user_id] = fingerprint
 
-    # ✅ Send success message to user
     requests.post(f"{API}/sendMessage", json={
         "chat_id": user_id,
-        "text": "✅ Device Verified Successfully!"
+        "text": "/verified_webhook"
     })
 
     return jsonify({
         "status": "success",
-        "message": "Verified"
+        "message": "Verification Successful ✅"
     })
 
 
