@@ -11,9 +11,7 @@
       text-align: center;
       font-family: Arial;
     }
-    .box {
-      margin-top: 120px;
-    }
+    .box { margin-top: 120px; }
     button {
       padding: 15px 30px;
       border-radius: 12px;
@@ -22,9 +20,6 @@
       color: white;
       font-size: 18px;
     }
-    #status {
-      margin-top: 20px;
-    }
   </style>
 </head>
 
@@ -32,10 +27,7 @@
 
 <div class="box">
   <h2>🔐 Device Verification</h2>
-  <p>Click below to verify</p>
-
   <button onclick="verify()">Verify Now</button>
-
   <div id="status"></div>
 </div>
 
@@ -48,29 +40,29 @@ function verify() {
     let user = Telegram.WebApp.initDataUnsafe.user;
 
     if (!user) {
-        alert("❌ Please open inside Telegram bot");
+        alert("❌ Open inside Telegram");
         return;
     }
 
     document.getElementById("status").innerHTML = "⏳ Verifying...";
 
-    fetch("https://api.telegram.org/bot8645066724:AAFwkbpnQDmpAjEf-lf-3nraM-A72Q9pd8Q/sendMessage", {
+    fetch("/api/verify", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-            chat_id: user.id,
-            text: "/verified_webhook"
+            id: user.id
         })
     })
-    .then(() => {
-        document.getElementById("status").innerHTML = "✅ Verified Successfully";
+    .then(res => res.json())
+    .then(data => {
 
-        setTimeout(() => {
-            Telegram.WebApp.close();
-        }, 1500);
-    })
-    .catch(() => {
-        document.getElementById("status").innerHTML = "❌ Error!";
+        if (data.status === "success") {
+            status.innerHTML = "✅ Verified";
+        } else {
+            status.innerHTML = "❌ Error";
+        }
+
+        setTimeout(() => Telegram.WebApp.close(), 1500);
     });
 }
 </script>
