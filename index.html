@@ -25,9 +25,9 @@
       color: white;
     }
 
-    .loader {
-      display: none;
+    .status {
       margin-top: 20px;
+      font-size: 18px;
     }
   </style>
 </head>
@@ -40,12 +40,11 @@
 
   <button onclick="verify()">Verify Now</button>
 
-  <div class="loader" id="loader">⏳ Verifying...</div>
+  <div class="status" id="status"></div>
 </div>
 
 <script>
 function verify() {
-    document.getElementById("loader").style.display = "block";
 
     let user = Telegram.WebApp.initDataUnsafe.user;
 
@@ -59,8 +58,22 @@ function verify() {
     })
     .then(res => res.json())
     .then(data => {
-        alert(data.message);
-        Telegram.WebApp.close();
+
+        let statusDiv = document.getElementById("status");
+
+        if (data.status === "success") {
+            statusDiv.innerHTML = "✅ Verified Successfully";
+        }
+        else if (data.status === "info") {
+            statusDiv.innerHTML = "✔️ Already Verified (Same Device)";
+        }
+        else {
+            statusDiv.innerHTML = "🚫 Different Device Detected";
+        }
+
+        setTimeout(() => {
+            Telegram.WebApp.close();
+        }, 2000);
     });
 }
 </script>
