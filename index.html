@@ -3,43 +3,12 @@
 <head>
   <title>Verification</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
-    body {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: white;
-      text-align: center;
-      font-family: Arial;
-    }
-    .box {
-      margin-top: 120px;
-    }
-    button {
-      padding: 15px 40px;
-      border-radius: 14px;
-      border: none;
-      background: #22c55e;
-      color: white;
-      font-size: 18px;
-      box-shadow: 0 0 20px #22c55e;
-    }
-    #status {
-      margin-top: 20px;
-      font-size: 16px;
-    }
-  </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h2>🔐 Secure Verification</h2>
-  <p>Click below to continue</p>
-
-  <button onclick="verify()">Verify Now</button>
-
-  <div id="status"></div>
-</div>
+<button onclick="verify()">Verify Now</button>
+<div id="status"></div>
 
 <script>
 Telegram.WebApp.ready();
@@ -50,14 +19,14 @@ function verify() {
     let user = Telegram.WebApp.initDataUnsafe.user;
 
     if (!user) {
-        alert("❌ Open in Telegram");
+        alert("❌ Open inside Telegram");
         return;
     }
 
     let status = document.getElementById("status");
     status.innerHTML = "⏳ Verifying...";
 
-    fetch("/verify", {
+    fetch(window.location.origin + "/api/verify", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ id: user.id })
@@ -66,15 +35,15 @@ function verify() {
     .then(data => {
 
         if (data.status === "success") {
-            status.innerHTML = "✅ Verified Successfully";
+            status.innerHTML = "✅ Verified";
         } else {
             status.innerHTML = "❌ " + data.message;
         }
 
         setTimeout(() => Telegram.WebApp.close(), 1500);
     })
-    .catch(() => {
-        status.innerHTML = "❌ Network Error";
+    .catch(err => {
+        status.innerHTML = "❌ Network Error: " + err.message;
     });
 }
 </script>
