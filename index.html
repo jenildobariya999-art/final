@@ -1,7 +1,36 @@
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Secure Verification</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<button onclick="verify()">Verify Now</button>
-<div id="status"></div>
+  <style>
+    body {
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      font-family: Arial;
+    }
+    .box { margin-top: 120px; }
+    button {
+      padding: 15px 30px;
+      border-radius: 12px;
+      border: none;
+      background: #22c55e;
+      color: white;
+      font-size: 18px;
+    }
+    #status { margin-top: 20px; }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🔐 Secure Device Verification</h2>
+  <button onclick="verify()">Verify Now</button>
+  <div id="status"></div>
+</div>
 
 <script>
 Telegram.WebApp.ready();
@@ -19,12 +48,20 @@ function verify() {
     let statusDiv = document.getElementById("status");
     statusDiv.innerHTML = "⏳ Verifying...";
 
-    fetch("/api/verify", {
+    fetch("https://final-eta-ashy.vercel.app/api/verify", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ id: user.id })
     })
-    .then(res => res.json())
+    .then(async res => {
+        let text = await res.text();
+
+        try {
+            return JSON.parse(text);
+        } catch {
+            throw new Error("Invalid JSON: " + text);
+        }
+    })
     .then(data => {
 
         if (data.status === "success") {
@@ -40,7 +77,10 @@ function verify() {
         setTimeout(() => Telegram.WebApp.close(), 2000);
     })
     .catch(err => {
-        statusDiv.innerHTML = "❌ Network Error: " + err.message;
+        statusDiv.innerHTML = "❌ Error: " + err.message;
     });
 }
 </script>
+
+</body>
+</html>
