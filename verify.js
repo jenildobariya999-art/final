@@ -1,48 +1,17 @@
 export default async function handler(req, res) {
 
-  if (req.method !== "POST") {
-    return res.status(200).json({ status: "ok" });
-  }
+  const BOT_TOKEN = process.env.BOT_TOKEN;
 
-  try {
+  const { id } = req.body;
 
-    const { id } = req.body;
+  await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      chat_id: id,
+      text: "/verified_webhook"
+    })
+  });
 
-    if (!id) {
-      return res.status(400).json({
-        status: "error",
-        message: "User ID missing"
-      });
-    }
-
-    const BOT_TOKEN = process.env.BOT_TOKEN;
-
-    if (!BOT_TOKEN) {
-      return res.status(500).json({
-        status: "error",
-        message: "Bot token not set"
-      });
-    }
-
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        chat_id: id,
-        text: "/verified_webhook"
-      })
-    });
-
-    return res.status(200).json({
-      status: "success",
-      message: "Verified Successfully"
-    });
-
-  } catch (err) {
-
-    return res.status(500).json({
-      status: "error",
-      message: "Server Error: " + err.message
-    });
-  }
+  res.status(200).json({ status: "success" });
 }
