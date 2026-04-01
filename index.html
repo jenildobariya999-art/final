@@ -1,49 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Verification</title>
+  <title>Verify</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 
 <body>
 
+<h2>🔐 Verify</h2>
 <button onclick="verify()">Verify Now</button>
 <div id="status"></div>
 
 <script>
 Telegram.WebApp.ready();
-Telegram.WebApp.expand();
 
 function verify() {
 
     let user = Telegram.WebApp.initDataUnsafe.user;
 
     if (!user) {
-        alert("❌ Open inside Telegram");
+        alert("❌ Open in Telegram");
         return;
     }
 
     let status = document.getElementById("status");
     status.innerHTML = "⏳ Verifying...";
 
-    fetch(window.location.origin + "/api/verify", {
+    fetch("https://YOUR-APP.vercel.app/api/verify", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ id: user.id })
     })
     .then(res => res.json())
     .then(data => {
-
-        if (data.status === "success") {
-            status.innerHTML = "✅ Verified";
-        } else {
-            status.innerHTML = "❌ " + data.message;
-        }
-
+        status.innerHTML = "✅ Verified";
         setTimeout(() => Telegram.WebApp.close(), 1500);
     })
-    .catch(err => {
-        status.innerHTML = "❌ Network Error: " + err.message;
+    .catch(() => {
+        status.innerHTML = "❌ Network Error";
     });
 }
 </script>
