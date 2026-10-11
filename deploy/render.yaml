@@ -1,0 +1,16 @@
+# Render Blueprint: New + > Blueprint > pick your GitHub repo containing this project
+services:
+  - type: web
+    name: selftbc
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/ping
+    envVars:
+      - key: SELFTBC_KEY
+        generateValue: true
+      - key: SELFTBC_DB
+        value: /tmp/selftbc.db
+      - key: SELFTBC_BACKUP_HOURS
+        value: "6"
+      - key: SELFTBC_BACKUP_CHAT
+        sync: false   # your Telegram user id
