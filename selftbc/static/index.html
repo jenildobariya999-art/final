@@ -1,1 +1,263 @@
-
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c"><title>SelfTBC</title>
+<style>
+:root{--bg:#0a0a0b;--hd:#111113;--card:#101012;--card2:#17171a;--line:#2a2a30;--fg:#f4f4f6;--mut:#9a9aa6;--pri:#8b5cf6;--pri2:#a78bfa;--prib:#1e1740;--ok:#22c55e;--bad:#ff4a3d;--blue:#2a9df4;--okbg:#0e3b2e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{zoom:.72}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.35 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:20;background:var(--hd);border-bottom:1px solid var(--line)}
+.hin{max-width:700px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:14px 18px}
+.logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(145deg,#142033,#0f1826);display:grid;place-items:center;border:1px solid #1d2b40}
+.hin h1{flex:1;font-size:22px;font-weight:600;margin:0}
+main{max-width:700px;margin:0 auto;padding:22px 16px}
+svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--hd);border-top:1px solid var(--line);z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+nav div{max-width:700px;margin:0 auto;display:flex}
+nav button{flex:1;background:none;border:0;color:#c7c7d1;padding:10px 0 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font:inherit;font-size:15px;cursor:pointer}
+nav button.on{color:var(--pri2)}nav svg.i{width:30px;height:30px}
+h2.pg{font-size:36px;margin:0;font-weight:700;letter-spacing:-.5px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:99px;background:var(--prib);color:var(--pri2);font-size:20px;border:1px solid transparent}
+.pill.out{background:transparent;border-color:var(--line);color:#d0d0d8}
+.fab{width:62px;height:58px;border-radius:16px;background:var(--pri);color:#fff;border:0;display:grid;place-items:center;cursor:pointer}
+.fab svg.i{width:30px;height:30px}
+.top{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.ib{background:none;border:0;color:#d4d4dc;cursor:pointer;padding:6px;display:grid;place-items:center}
+.search{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:18px;padding:0 16px;height:56px;color:var(--mut);margin:18px 0 22px}
+.search input{flex:1;background:none;border:0;color:var(--fg);font:inherit;font-size:20px;outline:0;min-width:0}
+.bcard{display:flex;gap:12px;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:16px 14px;margin-bottom:14px;cursor:pointer}
+.av{width:52px;height:52px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;font-size:20px;color:#fff;background:linear-gradient(135deg,#7c3aed,#2563eb)}
+.av.sq{border-radius:14px;background:#0a8fe0}.av svg.i{width:26px;height:26px;fill:#fff;stroke:none}
+.bi{flex:1;min-width:0}.bi b{display:block;font-size:22px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bi .u{color:#b9b9c3;font-size:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st{font-size:22px;display:flex;align-items:center;gap:8px;margin-top:2px}.st:before{content:"";width:12px;height:12px;border-radius:50%;background:currentColor}
+.st.w{color:#2ee66b}.st.s{color:#8a8a94}.st.c{color:#3b9bff}
+.bm{text-align:right;color:#cfcfd8;font-size:19px;min-width:120px}.bm b{display:block;color:#fff;font-size:20px;font-weight:600}
+.bm span{font-family:ui-monospace,Menlo,monospace;font-size:21px;color:#c9c9d3}
+.pin{color:var(--pri);margin-left:6px}.pin.off{color:#55555e}
+.seg{display:flex;gap:10px;margin-bottom:18px;align-items:center}
+.back{width:50px;height:50px;border-radius:50%;border:1px solid var(--line);background:#14111f;color:var(--pri2);display:grid;place-items:center;cursor:pointer;flex:none}
+.segs{flex:1;display:flex;gap:4px;overflow-x:auto;border:1px solid var(--line);border-radius:18px;padding:6px;scrollbar-width:none}.segs::-webkit-scrollbar{display:none}
+.segs button{flex:none;background:none;border:0;color:#cfcfd8;font:inherit;font-size:19px;padding:10px 14px;border-radius:13px;display:flex;gap:8px;align-items:center;cursor:pointer;white-space:nowrap}
+.segs button.on{background:var(--pri);color:#fff;font-weight:600}.segs svg.i{width:20px;height:20px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:16px;margin-bottom:14px}
+.lbl{font-size:15px;letter-spacing:.8px;color:#b2b2bd;text-transform:uppercase;margin-bottom:10px}
+.row{display:flex;align-items:center;gap:10px}.row>.g{flex:1;min-width:0}.row>.search{min-width:0}.row>.search input{width:100%}
+.sbtn{background:var(--bad);color:#fff;border:0;border-radius:14px;padding:16px 22px;font:inherit;font-size:22px;font-weight:600;display:flex;align-items:center;gap:12px;cursor:pointer}
+.sbtn.go{background:var(--ok);color:#052e12}
+.stat3{display:flex;border:1px solid var(--line);border-radius:20px;background:var(--card);margin-bottom:14px}
+.stat3>div{flex:1;padding:14px 16px;border-right:1px solid var(--line);min-width:0}.stat3>div:last-child{border:0}
+.stat3 small{display:block;color:#b2b2bd;font-size:18px}.stat3 b{font-size:34px;font-weight:600}
+.kv{display:flex;justify-content:space-between;align-items:center;padding:18px 4px;border-bottom:1px solid var(--line);font-size:22px;cursor:default}
+.kv:last-child{border:0}.kv.lnk{cursor:pointer}.kv .v{color:#b8b8c2;display:flex;align-items:center;gap:10px}
+.mono{font-family:ui-monospace,Menlo,monospace}.mut{color:var(--mut)}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:14px;padding:13px 20px;font:inherit;font-size:19px;cursor:pointer;display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.btn.sec{background:var(--card2);color:var(--fg);border:1px solid var(--line)}.btn.bad{background:var(--bad)}.btn.full{width:100%}.btn.dis{opacity:.45;pointer-events:none}
+.btn.dg{background:var(--okbg);color:#e8fff3}
+input.f,textarea.f,select.f{width:100%;background:var(--card2);color:var(--fg);border:1px solid var(--line);border-radius:14px;padding:14px;font:inherit;font-size:19px;outline:0}
+input.f:focus,textarea.f:focus{border-color:var(--pri)}
+textarea.f{font:14px/1.5 ui-monospace,Menlo,monospace;min-height:55vh;white-space:pre;tab-size:4;resize:vertical}
+.cmd{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:0 16px;height:66px;margin-bottom:12px;cursor:pointer}
+.cmd .n{flex:1;font-family:ui-monospace,Menlo,monospace;font-size:24px;color:#a78bfa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmd .c{color:#7e7e8a}.cmd.sel{border-color:var(--pri);background:#16112a}.red{color:#ff4a3d}
+.fl{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom));background:var(--hd);border-top:1px solid var(--line);z-index:25}
+.fl div{max-width:700px;margin:0 auto;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.fl .sp{flex:1}.cnt{background:#241c47;border-radius:12px;padding:3px 12px;margin-left:8px}
+.tg{display:flex;gap:8px;margin:14px 0}.tg button{background:var(--card2);border:0;color:#d4d4dc;font:inherit;font-size:19px;padding:10px 16px;border-radius:12px;cursor:pointer}.tg button.on{background:#2b2160;color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);margin-bottom:14px}
+.grid2>div{padding:16px;border:0 solid var(--line);border-right-width:1px;border-bottom-width:1px}.grid2>div:nth-child(2n){border-right:0}.grid2>div:nth-last-child(-n+2){border-bottom:0}
+.grid2 small{display:block;color:#b2b2bd;font-size:19px}.grid2 b{font-size:42px;font-weight:600;line-height:1.1}
+.bar{height:8px;background:#26262c;border-radius:9px;width:100px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pri);border-radius:9px}
+.sub{display:flex;gap:2px;border:1px solid var(--line);border-radius:18px;padding:6px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
+.sub button{flex:none;background:none;border:0;color:#cfcfd8;font:inherit;font-size:20px;padding:12px 18px;border-radius:12px;cursor:pointer}.sub button.on{background:var(--pri);color:#fff}
+.tog{width:64px;height:36px;border-radius:99px;background:#26262c;position:relative;border:0;cursor:pointer;flex:none}.tog:after{content:"";position:absolute;top:4px;left:4px;width:28px;height:28px;border-radius:50%;background:#fff;transition:.15s}.tog.on{background:var(--pri)}.tog.on:after{left:32px}
+.tag{padding:3px 10px;border-radius:99px;font-size:14px;background:#26262c;color:#cfcfd8}.tag.ok{background:#0e3b2e;color:#6ee7a8}.tag.bad{background:#3b1010;color:#ff8a80}
+pre.err{margin:8px 0 0;background:var(--card2);border-radius:12px;padding:12px;white-space:pre-wrap;word-break:break-word;font-size:13px;color:#ffb4ab}
+#toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#1d1d22;border:1px solid var(--line);padding:12px 18px;border-radius:14px;display:none;z-index:99;max-width:92%;font-size:17px}
+label.ck{display:flex;gap:12px;align-items:center;font-size:22px;margin:12px 0;cursor:pointer}
+input[type=checkbox],input[type=radio]{width:26px;height:26px;accent-color:var(--pri);flex:none}
+.empty{text-align:center;color:#8e8e99;padding:34px 10px;font-size:19px}
+.hint{color:#8e8e99;font-size:17px;line-height:1.5}
+a{color:var(--pri2)}
+@media(min-width:900px){html{zoom:.85}}
+</style></head><body>
+<header><div class="hin"><div class="logo" id="logo"></div><h1>SelfTBC</h1><button class="ib" onclick="S.nav='bots';go()" title="Errors"><span id="bell"></span></button></div></header>
+<main id="app"></main>
+<div id="fl"></div>
+<nav><div id="nav"></div></nav><div id="toast"></div>
+<script>
+const P={home:'<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',cpu:'<rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M19 9h3M19 14h3M2 9h3M2 14h3"/>',dl:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',up:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+menu:'<path d="M3 6h18M3 12h18M3 18h18"/>',bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/>',plus:'<path d="M12 5v14M5 12h14"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',pin:'<path d="M12 17v5M9 3h6l-1 7 3 3v2H7v-2l3-3z" fill="currentColor"/>',code:'<path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>',
+r:'<path d="M9 18l6-6-6-6"/>',l:'<path d="M15 18l-6-6 6-6"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/>',check:'<path d="M20 6L9 17l-5-5"/>',
+warn:'<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>',circ:'<circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>',
+refresh:'<path d="M23 4v6h-6M1 20v-6h6M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/>',users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',eye:'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',
+sl:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',lay:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+stop:'<rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/>',play:'<path d="M7 4l13 8-13 8z" fill="currentColor"/>',plane:'<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>',lines:'<path d="M4 6h16M4 12h10M4 18h16"/>'};
+const ic=(n,s)=>`<svg class="i" viewBox="0 0 24 24"${s?` style="width:${s}px;height:${s}px"`:''}>${P[n]}</svg>`;
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let KEY=localStorage.getItem('key')||'';
+const S={nav:'home',bot:null,tab:'intro',adm:'ov',cmds:null,cedit:null,q:'',sel:null,sort:'az',pins:JSON.parse(localStorage.getItem('pins')||'[]'),filter:'all',showTok:false,tokenCache:null};
+$('#logo').innerHTML=`<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13c3-8 10-9 16-6-5 0-8 2-9 5 3-2 6-2 9 0-6 0-9 3-9 7-3-1-5-3-7-6z"/></svg>`;
+$('#bell').innerHTML=ic('bell',26);$('#bell').style.color='var(--pri2)';
+function toast(m,bad){const t=$('#toast');t.textContent=m;t.style.borderColor=bad?'#ff4a3d':'#2a2a30';t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3600)}
+async function api(path,o={}){const h={'X-API-Key':KEY};let b=o.body;if(b&&typeof b!=='string'){b=JSON.stringify(b);h['Content-Type']='application/json'}
+ const r=await fetch(path,{method:o.method||'GET',headers:h,body:b});if(r.status===401){login();throw Error('unauthorized')}
+ const t=await r.text();let j;try{j=JSON.parse(t)}catch{j=t}if(!r.ok)throw Error(j.error||t);return j}
+async function dl(path,name){const r=await fetch(path,{headers:{'X-API-Key':KEY}});const b=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}
+const pick=acc=>new Promise(res=>{const i=document.createElement('input');i.type='file';i.accept=acc||'';i.onchange=()=>i.files[0]&&i.files[0].text().then(res);i.click()});
+const copy=t=>{navigator.clipboard?.writeText(String(t)).then(()=>toast('Copied'),()=>toast('Copy failed',1))};
+const fmtN=n=>n>=1e6?(n/1e6).toFixed(1).replace('.0','')+'M':n>=1e3?(n/1e3).toFixed(n>=1e4?0:1).replace('.0','')+'k':String(n);
+const fmtUp=s=>{const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=n=>String(n).padStart(2,'0');return `${p(h)}:${p(m)}:${p(x)}`};
+const fmtD=t=>t?new Date(t*1000).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—';
+function login(){$('#nav').innerHTML='';$('#app').innerHTML=`<div class="card"><div class="lbl">Dashboard key</div><input class="f" id="k" type="password" placeholder="SELFTBC_KEY" autofocus><p><button class="btn full" onclick="KEY=$('#k').value;localStorage.setItem('key',KEY);go()">Login</button></p></div>`}
+function nav(){const it=[['home','Home','home'],['bots','Bots','cpu'],['backup','Backup','dl'],['settings','Settings','gear'],['more','More','menu']];
+ $('#nav').innerHTML=it.map(([k,l,i])=>`<button class="${S.nav==k?'on':''}" onclick="S.nav='${k}';S.bot=null;go()">${ic(i)}<span>${l}</span></button>`).join('')}
+async function go(){nav();$('#fl').innerHTML='';try{await({home,bots:botsPage,backup,settings,more}[S.nav])()}catch(e){if(e.message!='unauthorized')$('#app').innerHTML=`<div class="empty">${esc(e.message)}</div>`}}
+/* ---------------- Home */
+async function home(){const o=await api('/api/overview');const bs=await api('/api/bots');
+ $('#app').innerHTML=`<h2 class="pg" style="margin-bottom:18px">Dashboard</h2><div class="grid2">${[['Bots',o.bots],['Running',o.running],['Users',fmtN(o.users)],['Commands',o.commands],['Errors logged',o.errors],['DB size',o.db_mb+' MB']].map(x=>`<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('')}</div>
+ <div class="lbl" style="margin-top:20px">Needs attention</div>${bs.filter(b=>b.errors||(!b.running)).slice(0,8).map(cardHtml).join('')||'<div class="empty">All bots are healthy 🎉</div>'}`}
+/* ---------------- Bots list */
+function cardHtml(b){const pin=S.pins.includes(b.id),st=b.running?['Working','w']:['Stopped','s'];
+ const av=b.name?`<div class="av">${esc(b.name[0].toUpperCase())}</div>`:`<div class="av sq">${ic('plane')}</div>`;
+ return `<div class="bcard" onclick="openBot('${b.id}')">${av}<div class="bi"><b>${esc(b.name)}</b><div class="u">@${esc(b.username)}</div><div class="st ${st[1]}">${st[0]}</div></div>
+ <div class="bm"><b>${b.users} users</b><span>${b.id.slice(-8)}</span></div>
+ <button class="ib" title="Backup" onclick="event.stopPropagation();dl('/api/bots/${b.id}/backup','backup_${b.id}.json')">${ic('dl',24)}</button>
+ <button class="ib pin ${pin?'':'off'}" onclick="event.stopPropagation();pinBot('${b.id}')">${ic('pin',26)}</button></div>`}
+function pinBot(id){S.pins=S.pins.includes(id)?S.pins.filter(x=>x!=id):[id,...S.pins];localStorage.setItem('pins',JSON.stringify(S.pins));go()}
+let BOTS=[];
+async function botsPage(){BOTS=await api('/api/bots');const tot=BOTS.reduce((a,b)=>a+b.users,0),run=BOTS.filter(b=>b.running).length;
+ $('#app').innerHTML=`<div class="top"><h2 class="pg">My Bots</h2><span class="pill">${fmtN(tot)} users</span><span style="flex:1"></span><button class="fab" onclick="addBotDlg()">${ic('plus')}</button><button class="ib" onclick="botsMenu()">${ic('lines',26)}</button></div>
+ <div class="row" style="gap:12px;overflow-x:auto"><button class="pill ${S.filter=='all'?'':'out'}" onclick="S.filter='all';go()">${ic('folder',22)} All Bots (${BOTS.length})</button><button class="pill ${S.filter=='run'?'':'out'}" onclick="S.filter='run';go()">${ic('folder',22)} Working (${run})</button><button class="pill ${S.filter=='stop'?'':'out'}" onclick="S.filter='stop';go()">${ic('folder',22)} Stopped (${BOTS.length-run})</button></div>
+ <div class="search">${ic('search',24)}<input id="bq" placeholder="Search" value="${esc(S.q)}" oninput="S.q=this.value;drawBots()"></div><div id="bl"></div>`;drawBots()}
+function drawBots(){const q=S.q.toLowerCase();let l=BOTS.filter(b=>(S.filter=='all'||(S.filter=='run')==b.running)&&(!q||(b.name+b.username+b.id).toLowerCase().includes(q)));
+ l.sort((a,b)=>(S.pins.includes(b.id)-S.pins.includes(a.id))||0);$('#bl').innerHTML=l.map(cardHtml).join('')||'<div class="empty">No bots. Tap + to add one.</div>'}
+function addBotDlg(){$('#app').innerHTML=`<div class="seg"><button class="back" onclick="go()">${ic('l',24)}</button><h2 class="pg" style="font-size:28px">Add bot</h2></div><div class="card"><div class="lbl">Bot token (from @BotFather)</div><input class="f" id="tok" placeholder="123456:ABC…"><p><button class="btn full" onclick="addBot()">Add bot</button></p></div>`}
+async function addBot(){try{const b=await api('/api/bots',{method:'POST',body:{token:$('#tok').value}});toast('Added @'+b.username);openBot(b.id)}catch(e){toast(e.message,1)}}
+function botsMenu(){$('#app').insertAdjacentHTML('afterbegin',`<div class="card" id="bm"><button class="btn sec full" onclick="S.nav='backup';go()">Backup / Restore all bots</button></div>`);setTimeout(()=>{document.addEventListener('click',()=>$('#bm')?.remove(),{once:true})},0)}
+/* ---------------- Bot detail */
+async function openBot(id){S.bot=await api('/api/bots/'+id);S.tab='intro';S.cedit=null;S.cmds=null;S.sel=null;S.showTok=false;S.nav='bots';nav();botView()}
+async function refreshBot(){S.bot=await api('/api/bots/'+S.bot.id)}
+const TABS=[['intro','Intro','lay'],['commands','Commands','code'],['search','Search','search'],['errors','Errors','circ'],['manage','Manage','gear'],['admin','Admin','users'],['settings','Settings','sl']];
+async function botView(){$('#fl').innerHTML='';
+ $('#app').innerHTML=`<div class="seg"><button class="back" onclick="S.bot=null;go()">${ic('l',24)}</button><div class="segs" id="segs">${TABS.map(t=>`<button data-t="${t[0]}" class="${S.tab==t[0]?'on':''}" onclick="S.tab='${t[0]}';S.cedit=null;botView()">${ic(t[2])}${t[1]}</button>`).join('')}</div></div><div id="pane"></div>`;
+ $('#segs [data-t="'+S.tab+'"]')?.scrollIntoView({inline:'center',block:'nearest'});
+ try{await({intro,commands,search,errors,manage,admin,settings:bset})[S.tab]()}catch(e){if(e.message!='unauthorized')$('#pane').innerHTML=`<div class="empty">${esc(e.message)}</div>`}}
+async function intro(){await refreshBot();const b=S.bot;
+ $('#pane').innerHTML=`<div class="card"><div class="row"><div class="av" style="width:84px;height:84px;font-size:30px">${esc((b.name||'?')[0].toUpperCase())}</div><div class="g"><b style="font-size:28px;display:block">${esc(b.name)}</b><div style="color:var(--pri2);font-size:22px">@${esc(b.username)}</div><div class="mono mut" style="font-size:20px">${b.id.slice(-8)} · <span style="color:${b.running?'#2ee66b':'#8a8a94'}">● ${b.running?'Active':'Stopped'}</span></div></div>
+ <button class="sbtn ${b.running?'':'go'}" onclick="toggleBot()">${ic(b.running?'stop':'play',26)}${b.running?'Stop':'Start'}</button></div></div>
+ <div class="stat3"><div><small>Users</small><b>${b.users}</b></div><div><small>Commands</small><b>${b.commands}</b></div><div><small>Uptime</small><b style="font-size:26px">${fmtUp(b.uptime)}</b></div></div>
+ <div class="card" style="padding:4px 16px"><div class="kv"><span>Last active</span><span class="v">${fmtD(b.last_active)}</span></div><div class="kv"><span>Version</span><span class="v">v${esc(b.version)}</span></div></div>
+ <div class="card" style="padding:4px 16px">
+ <div class="kv lnk" onclick="window.open('https://t.me/${esc(b.username)}','_blank')"><span>Open in Telegram</span><span class="v">${ic('r',22)}</span></div>
+ <div class="kv lnk" onclick="S.tab='commands';botView()"><span>Commands</span><span class="v">${b.commands} ${ic('r',22)}</span></div>
+ <div class="kv lnk" onclick="S.tab='errors';botView()"><span>Errors</span><span class="v">${b.errors?`<span class="tag bad">${b.errors}</span>`:''}${ic('r',22)}</span></div>
+ <div class="kv lnk" onclick="S.tab='admin';botView()"><span>Admin panel</span><span class="v">${ic('r',22)}</span></div>
+ <div class="kv lnk" onclick="S.tab='manage';botView()"><span>Manage</span><span class="v">${ic('r',22)}</span></div>
+ <div class="kv lnk" onclick="copy('${b.id}')"><span>Copy bot ID</span><span class="v mono">${b.id.slice(-8)}</span></div></div>`}
+async function toggleBot(){await api(`/api/bots/${S.bot.id}/${S.bot.running?'stop':'start'}`,{method:'POST'});await new Promise(r=>setTimeout(r,300));intro()}
+/* ---------------- Commands */
+async function loadCmds(){S.cmds=await api(`/api/bots/${S.bot.id}/commands`)}
+async function commands(){if(S.cedit!==null)return editor();await loadCmds();drawCmds()}
+function drawCmds(){const q=(S.q2||'').toLowerCase();let l=S.cmds.filter(c=>!q||c.name.toLowerCase().includes(q));if(S.sort=='runs')l=[...l].sort((a,b)=>b.runs-a.runs);
+ const selm=S.sel!==null;$('#pane').innerHTML=`<div class="card"><div class="row"><div class="search" style="margin:0;height:54px;flex:1;border-radius:14px;background:var(--card2)">${ic('search',22)}<input placeholder="Search" value="${esc(S.q2||'')}" oninput="S.q2=this.value;drawCmds();this.focus()" id="cq"></div>
+ <button class="ib" title="Export" onclick="dl('/api/bots/${S.bot.id}/commands/export','commands_${S.bot.id}.txt')">${ic('code')}</button>
+ <button class="ib" style="color:${selm?'var(--pri2)':''}" title="Select" onclick="S.sel=selm?null:new Set();drawCmds()">${ic('check')}</button>
+ <button class="ib" onclick="bulkDel()" style="${selm&&S.sel.size?'color:#ff4a3d':'opacity:.5'}">${ic('trash')}</button>
+ <button class="fab" style="width:56px;height:54px" onclick="S.cedit={name:'',code:''};editor()">${ic('plus')}</button></div></div>
+ ${l.map(c=>{const i=S.cmds.indexOf(c);return `<div class="cmd ${selm&&S.sel.has(c.name)?'sel':''}" onclick="cmdClick(${i})"><span class="c">${selm?ic(S.sel.has(c.name)?'check':'code',20):ic('code',22)}</span><span class="n">${esc(c.name)}</span>${selm?'':`<button class="ib" onclick="event.stopPropagation();editCmd(${i})">${ic('edit',24)}</button><button class="ib red" onclick="event.stopPropagation();delCmd(${i})">${ic('trash',24)}</button>`}</div>`}).join('')||'<div class="empty">No commands.</div>'}
+ <div style="height:70px"></div>`;
+ $('#fl').innerHTML=`<div class="fl"><div><button class="back" style="width:44px;height:44px;opacity:.5">${ic('l',20)}</button><button class="pill" onclick="S.sort=S.sort=='az'?'runs':'az';drawCmds()" style="font-size:19px">${ic('lines',20)} ${S.sort=='az'?'All':'Top'} <span class="cnt">${S.cmds.length}</span></button><span class="sp"></span><button class="back" style="width:44px;height:44px;opacity:.5">${ic('r',20)}</button><button class="back" style="border-radius:14px" onclick="cmdMenu()">${ic('gear',22)}</button></div></div>`}
+function cmdMenu(){const a=prompt('Actions: type  import  to import a commands file / backup');if(a&&a.trim().toLowerCase()=='import')impCmds()}
+function cmdClick(i){if(S.sel!==null){const n=S.cmds[i].name;S.sel.has(n)?S.sel.delete(n):S.sel.add(n);drawCmds()}else editCmd(i)}
+async function editCmd(i){S.cedit=await api(`/api/bots/${S.bot.id}/command?name=${encodeURIComponent(S.cmds[i].name)}`);S.cedit.orig=S.cedit.name;editor()}
+async function delCmd(i){if(!confirm('Delete '+S.cmds[i].name+'?'))return;await api(`/api/bots/${S.bot.id}/command?name=${encodeURIComponent(S.cmds[i].name)}`,{method:'DELETE'});commands()}
+async function bulkDel(){if(!S.sel||!S.sel.size)return;if(!confirm(`Delete ${S.sel.size} commands permanently?`))return;for(const n of S.sel)await api(`/api/bots/${S.bot.id}/command?name=${encodeURIComponent(n)}`,{method:'DELETE'});S.sel=null;commands()}
+function editor(){const c=S.cedit;$('#fl').innerHTML='';
+ $('#pane').innerHTML=`<div class="card"><div class="lbl">Command name</div><input class="f mono" id="cn" value="${esc(c.name)}" placeholder="/start, menu, *, @, ~, !, .env"><div class="lbl" style="margin-top:14px">TPY code</div><textarea class="f" id="cc" spellcheck="false" autocapitalize="off">${esc(c.code)}</textarea>
+ <div class="row" style="margin-top:14px;flex-wrap:wrap"><button class="btn" onclick="saveCmd()">${ic('check',20)} Save</button><button class="btn sec" onclick="validate()">Validate</button><button class="btn sec" onclick="S.cedit=null;commands()">Close</button></div></div>`}
+async function saveCmd(){const n=$('#cn').value.trim();try{await api(`/api/bots/${S.bot.id}/command`,{method:'PUT',body:{name:n,code:$('#cc').value}});if(S.cedit.orig&&S.cedit.orig!==n&&confirm(`Renamed. Delete old command "${S.cedit.orig}"?`))await api(`/api/bots/${S.bot.id}/command?name=${encodeURIComponent(S.cedit.orig)}`,{method:'DELETE'});S.cedit.orig=n;toast('Saved ✓')}catch(e){toast(e.message,1)}}
+async function validate(){const r=await api('/api/validate',{method:'POST',body:{code:$('#cc').value}});toast(r.ok?'Syntax OK ✓':r.error,!r.ok)}
+async function impCmds(){const t=await pick('.txt,.json');const r=await api(`/api/bots/${S.bot.id}/commands/import`,{method:'POST',body:t});toast(`Added ${r.added}, updated ${r.updated}, rejected ${r.rejected.length}`,!!r.rejected.length);if(r.rejected.length)alert('Rejected:\n'+r.rejected.map(x=>x.name+': '+x.error).join('\n'));commands()}
+/* ---------------- Search */
+const SO={case:false,word:false,rx:false};
+async function search(){$('#fl').innerHTML='';const n=(S.cmds||await api(`/api/bots/${S.bot.id}/commands`)).filter(c=>c.lines>0).length;
+ $('#pane').innerHTML=`<div class="card"><div class="search" style="margin:0 0 14px;border-color:#5b3fd0"><span>${ic('search',22)}</span><input id="sq" class="mono" placeholder="Search across all command code…" style="font-size:19px"></div>
+ <div class="tg"><button id="o1" onclick="tgo('case',this)">Aa</button><button id="o2" onclick="tgo('word',this)">|ab|</button><button id="o3" onclick="tgo('rx',this)">.*</button><button class="" style="background:none" onclick="hist()">${ic('clock',20)} History</button></div>
+ <div class="row"><div class="search" style="margin:0;height:56px;flex:1;border-radius:14px">${ic('lines',20)}<input id="rp" class="mono" placeholder="Replace with… (leave empty to delete)" style="font-size:17px"></div><button class="btn dg" style="height:56px" onclick="doSearch(true)">Replace All</button></div>
+ <p class="hint">Searches ${n} commands with code.</p></div><div id="sr"></div>`;
+ let t;$('#sq').oninput=()=>{clearTimeout(t);t=setTimeout(()=>doSearch(false),300)}}
+function tgo(k,el){SO[k]=!SO[k];el.classList.toggle('on',SO[k]);if($('#sq').value)doSearch(false)}
+function hist(){const h=JSON.parse(localStorage.getItem('sh')||'[]');if(!h.length)return toast('No history yet');const p=prompt('Recent searches:\n'+h.map((x,i)=>(i+1)+'. '+x).join('\n')+'\n\nType a number to reuse:');const i=parseInt(p)-1;if(h[i]){$('#sq').value=h[i];doSearch(false)}}
+async function doSearch(rep){const q=$('#sq').value;if(!q)return;const b={q,case:SO.case,word:SO.word,regex:SO.rx};if(rep){if(!confirm('Replace in ALL matching commands? (syntax is validated per command)'))return;b.replace=$('#rp').value}
+ try{const r=await api(`/api/bots/${S.bot.id}/search`,{method:'POST',body:b});let h=JSON.parse(localStorage.getItem('sh')||'[]');h=[q,...h.filter(x=>x!=q)].slice(0,15);localStorage.setItem('sh',JSON.stringify(h));
+ $('#sr').innerHTML=(rep?`<div class="card">Changed ${r.changed} command(s)</div>`:`<p class="hint">${r.matches.reduce((a,m)=>a+m.count,0)} matches in ${r.matches.length} commands</p>`)+r.matches.map(m=>`<div class="card"><div class="row"><b class="mono" style="color:#a78bfa;flex:1">${esc(m.name)}</b><span class="tag">${m.count}</span></div><pre class="err" style="color:#d6d6de">${m.lines.slice(0,8).map(l=>l.n+': '+esc(l.text)).join('\n')}</pre></div>`).join('')}catch(e){toast(e.message,1)}}
+/* ---------------- Errors */
+async function errors(){$('#fl').innerHTML='';const e=await api(`/api/bots/${S.bot.id}/errors`);
+ $('#pane').innerHTML=`<div class="card" style="padding:0"><div class="row" style="padding:16px 18px;border-bottom:1px solid var(--line)"><span class="red">${ic('warn',24)}</span><b style="font-size:26px;flex:1">Errors</b><button class="ib" onclick="errors()">${ic('refresh',26)}</button><button class="ib" style="font-size:22px;gap:6px;display:flex;align-items:center" onclick="clrErr()">${ic('trash',24)} Clear</button></div>
+ ${e.length?e.map(x=>`<div style="padding:14px 18px;border-bottom:1px solid var(--line)"><div class="row"><b class="mono" style="color:#a78bfa;flex:1">${esc(x.command)}</b><span class="mut" style="font-size:14px">${new Date(x.ts*1000).toLocaleString()}</span></div><pre class="err">${esc(x.error)}</pre></div>`).join(''):'<div class="empty" style="padding:50px 20px;font-size:22px">No errors found — your bot is running smoothly.</div>'}</div>`}
+async function clrErr(){await api(`/api/bots/${S.bot.id}/errors`,{method:'DELETE'});errors()}
+/* ---------------- Manage */
+let ENV=[],ENVRAW=false,ENVTXT='';
+function parseEnv(t){const rows=[];let raw=false;for(const ln of t.split('\n')){if(!ln.trim())continue;const m=ln.match(/^([A-Za-z_]\w*)\s*=\s*(.+)$/);if(!m){raw=true;continue}let v=m[2].trim();if(/^"(?:[^"\\]|\\.)*"$/.test(v)){try{rows.push({k:m[1],v:JSON.parse(v),raw:false});continue}catch{}}rows.push({k:m[1],v,raw:true})}return{rows,raw}}
+function envTxt(){return ENV.filter(r=>r.k).map(r=>`${r.k} = ${r.raw?r.v:JSON.stringify(r.v)}`).join('\n')}
+async function manage(){$('#fl').innerHTML='';const b=S.bot;let t='';try{t=(await api(`/api/bots/${b.id}/command?name=.env`)).code}catch{}
+ ENVTXT=t;const p=parseEnv(t);ENV=p.rows;ENVRAW=p.raw||ENVRAW;drawManage()}
+function drawManage(){const b=S.bot;
+ $('#pane').innerHTML=`<div class="card"><div class="lbl">Update version — current: ${esc(b.version)}</div><div class="row"><input class="f" id="nv" placeholder="e.g. 1.0.0"><button class="btn" onclick="setVer()">Update</button></div></div>
+ <div class="card"><div class="row"><div class="lbl g" style="margin:0">Environment variables</div><a href="#" onclick="ENVRAW=!ENVRAW;if(!ENVRAW){const p=parseEnv($('#et')?.value||'');ENV=p.rows}else ENVTXT=envTxt();drawManage();return false">${ENVRAW?'Edit rows':'Edit raw'} ›</a></div>
+ <p class="hint">Injected as globals into every command (e.g. APP_URL, ADMIN_IDS). Values are strings unless you mark a row <b>raw</b> (for numbers, lists, {…}).</p>
+ ${ENVRAW?`<textarea class="f" id="et" style="min-height:160px" spellcheck="false">${esc(ENVTXT)}</textarea>`:(ENV.length?ENV.map((r,i)=>`<div class="row" style="margin-bottom:8px"><input class="f mono" style="flex:1.2" placeholder="NAME" value="${esc(r.k)}" oninput="ENV[${i}].k=this.value"><input class="f mono" style="flex:2" placeholder="value" value="${esc(r.v)}" oninput="ENV[${i}].v=this.value"><label class="ck" style="margin:0;font-size:15px"><input type="checkbox" ${r.raw?'checked':''} onchange="ENV[${i}].raw=this.checked">raw</label><button class="ib red" onclick="ENV.splice(${i},1);drawManage()">${ic('trash',22)}</button></div>`).join(''):'<p class="mut" style="font-size:19px">No variables yet. Add one below.</p>')}
+ <div class="row" style="margin-top:12px"><a href="#" style="font-size:20px;flex:1;text-decoration:none" onclick="ENVRAW=false;ENV.push({k:'',v:'',raw:false});drawManage();return false">+ Add variable</a><button class="btn" onclick="saveEnv()">Save .env</button></div></div>
+ <div class="card"><div class="lbl">Export users</div><label class="ck"><input type="radio" name="fm" value="json" checked>JSON</label><label class="ck" style="margin-top:-4px"><input type="radio" name="fm" value="csv">CSV</label>
+ <label class="ck"><input type="checkbox" id="xl" checked>Last Active Date</label><label class="ck"><input type="checkbox" id="xc" checked>Creation Date</label><button class="btn full" onclick="expUsers()">${ic('dl',22)} Export</button></div>
+ <div class="card"><div class="lbl">Import users</div><p class="hint" style="font-size:19px">JSON, CSV or TXT with Telegram user IDs: our export or another platform's. Every ID can optionally be checked with Telegram through this bot (≈10 a second).</p><label class="ck" style="font-size:19px"><input type="checkbox" id="vf">Verify each ID with Telegram</label><button class="btn" onclick="impUsers()">${ic('up',22)} Choose file</button><p id="ij" class="hint"></p></div>`}
+async function setVer(){const v=$('#nv').value.trim();if(!v)return;await api(`/api/bots/${S.bot.id}/version`,{method:'POST',body:{version:v}});await refreshBot();toast('Version updated');drawManage()}
+async function saveEnv(){const code=ENVRAW?$('#et').value:envTxt();try{await api(`/api/bots/${S.bot.id}/command`,{method:'PUT',body:{name:'.env',code}});ENVTXT=code;toast('.env saved ✓')}catch(e){toast(e.message,1)}}
+function expUsers(){const f=document.querySelector('input[name=fm]:checked').value;dl(`/api/bots/${S.bot.id}/users/export?format=${f}&creation=${$('#xc').checked?1:0}&last_active=${$('#xl').checked?1:0}`,`users_${S.bot.id}.${f}`)}
+async function impUsers(){const t=await pick('.json,.csv,.txt');try{const r=await api(`/api/bots/${S.bot.id}/users/import?verify=${$('#vf').checked?1:0}`,{method:'POST',body:t});const poll=async()=>{const j=await api('/api/import-jobs/'+r.job);$('#ij').textContent=`${j.done}/${j.total} · added ${j.added} · existing ${j.skipped} · unreachable ${j.unreachable}${j.finished?' ✓ done':''}`;if(!j.finished)setTimeout(poll,1000)};poll()}catch(e){toast(e.message,1)}}
+/* ---------------- Admin */
+async function admin(){$('#fl').innerHTML='';const st=[['ov','Overview'],['us','Users'],['bc','Broadcasts'],['bd','Bot Data'],['ud','User Data']];
+ $('#pane').innerHTML=`<div class="sub">${st.map(s=>`<button class="${S.adm==s[0]?'on':''}" onclick="S.adm='${s[0]}';admin()">${s[1]}</button>`).join('')}</div><div id="ap"></div>`;await({ov:aOv,us:aUs,bc:aBc,bd:aBd,ud:aUd})[S.adm]()}
+async function aOv(){const [u,c]=await Promise.all([api(`/api/bots/${S.bot.id}/users?limit=1`),api(`/api/bots/${S.bot.id}/commands/stats`)]);const s=u.stats,mx=Math.max(1,...c.map(x=>x.lines));
+ const g=(l,v,col)=>`<div><small>${l}</small><b style="color:${col||'#fff'}">${v}</b></div>`;
+ $('#ap').innerHTML=`<div class="grid2">${g('Total Users',s.total)}${g('Active (24h)',s.active_24h,'#2ee66b')}${g('Active (7d)',s.active_7d)}${g('Active (30d)',s.active_30d)}${g('New (24h)',s.new_24h,'#2ee66b')}${g('New (7d)',s.new_7d,'#f59e0b')}${g('New (30d)',s.new_30d,'#f59e0b')}${g('Blocked',s.blocked,'#ff4a3d')}</div>
+ <div class="card"><div class="lbl">Commands (${c.length})</div>${c.map(x=>`<div class="row" style="padding:10px 0"><span class="mono g" style="font-size:19px;overflow:hidden;text-overflow:ellipsis">${esc(x.name)}</span><span class="mut" style="font-size:18px">${x.lines} lines</span><div class="bar"><i style="width:${Math.max(4,x.lines/mx*100)}%"></i></div></div>`).join('')}</div>`}
+async function aUs(q=''){const r=await api(`/api/bots/${S.bot.id}/users?limit=100&search=${encodeURIComponent(q)}`);
+ $('#ap').innerHTML=`<div class="search" style="margin-top:0">${ic('search',22)}<input placeholder="Search id / name / @username" value="${esc(q)}" onchange="aUs(this.value)"></div>`+(r.users.map(u=>`<div class="cmd" style="height:auto;padding:12px 16px;cursor:default"><div class="g" style="min-width:0"><b style="font-size:20px">${esc(u.first_name||'—')}</b> <span class="mut">@${esc(u.username||'-')}</span><div class="mono mut" style="font-size:16px">${u.user_id} · ${fmtD(u.last_active)}</div></div><button class="btn sec" onclick="blockU('${u.user_id}',${u.blocked?0:1})">${u.blocked?'Unblock':'Block'}</button></div>`).join('')||'<div class="empty">No users</div>')}
+async function blockU(id,b){await api(`/api/bots/${S.bot.id}/users/${id}/block`,{method:'POST',body:{blocked:!!b}});aUs()}
+async function aBc(){const [cmds,bc]=await Promise.all([api(`/api/bots/${S.bot.id}/commands`),api(`/api/bots/${S.bot.id}/broadcasts`)]);
+ $('#ap').innerHTML=`<div class="card"><div class="lbl">New broadcast</div><p class="hint">Runs the chosen command once for every non-blocked user, as that user (e.g. a command that does bot.sendMessage / copyMessage).</p><select class="f" id="bcmd">${cmds.map(c=>`<option>${esc(c.name)}</option>`).join('')}</select><div class="lbl" style="margin-top:12px">Speed (msgs/sec, 1–25)</div><input class="f" id="bsp" type="number" value="8" min="1" max="25"><p><button class="btn full" onclick="startBc()">Start broadcast</button></p></div>`+
+ bc.map(b=>`<div class="card"><div class="row"><b class="mono g">${esc(b.command)}</b><span class="tag ${b.status=='done'?'ok':b.status=='running'?'':'bad'}">${b.status}</span></div><div class="hint">${b.sent}/${b.total} sent · ${b.failed} failed</div>${b.status=='running'?`<button class="btn bad" onclick="api('/api/broadcasts/${b.id}/stop',{method:'POST'}).then(aBc)">Stop</button> <button class="btn sec" onclick="aBc()">${ic('refresh',20)}</button>`:''}</div>`).join('')}
+async function startBc(){if(!confirm('Start broadcast now?'))return;try{await api(`/api/bots/${S.bot.id}/broadcast`,{method:'POST',body:{command:$('#bcmd').value,speed:+$('#bsp').value}});aBc()}catch(e){toast(e.message,1)}}
+async function aBd(){const d=await api(`/api/bots/${S.bot.id}/data`);
+ $('#ap').innerHTML=`<div class="row" style="margin-bottom:12px"><button class="btn" onclick="editKey('')">${ic('plus',20)} New key</button><button class="btn sec" onclick="dl('/api/bots/${S.bot.id}/data/export','data_${S.bot.id}.json')">${ic('dl',20)} Export</button><button class="btn sec" onclick="impData()">${ic('up',20)} Import</button></div>`+
+ (d.bot_data.map(k=>`<div class="cmd" onclick="editKey(decodeURIComponent('${encodeURIComponent(k.name)}'))"><span class="n">${esc(k.name)}</span><span class="mut">${k.size} B</span></div>`).join('')||'<div class="empty">No bot data (Bot.saveData)</div>')}
+async function editKey(n){let v='';if(n)v=JSON.stringify((await api(`/api/bots/${S.bot.id}/data/key?name=${encodeURIComponent(n)}`)).value,null,2);
+ $('#ap').innerHTML=`<div class="card"><div class="lbl">Key</div><input class="f mono" id="dk" value="${esc(n)}"><div class="lbl" style="margin-top:12px">Value (JSON)</div><textarea class="f" id="dv" style="min-height:30vh">${esc(v)}</textarea><div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn" onclick="saveKey()">Save</button>${n?`<button class="btn bad" onclick="delKey('${encodeURIComponent(n)}')">Delete</button>`:''}<button class="btn sec" onclick="aBd()">Back</button></div></div>`}
+async function saveKey(){let v;try{v=JSON.parse($('#dv').value)}catch{v=$('#dv').value}try{await api(`/api/bots/${S.bot.id}/data/key`,{method:'PUT',body:{name:$('#dk').value,value:v}});toast('Saved ✓');aBd()}catch(e){toast(e.message,1)}}
+async function delKey(n){if(!confirm('Delete key?'))return;await api(`/api/bots/${S.bot.id}/data/key?name=${n}`,{method:'DELETE'});aBd()}
+async function impData(){const t=await pick('.json');const r=await api(`/api/bots/${S.bot.id}/data/import`,{method:'POST',body:t});toast(JSON.stringify(r));aBd()}
+async function aUd(u=''){const r=await api(`/api/bots/${S.bot.id}/userdata?user=${encodeURIComponent(u)}`);
+ $('#ap').innerHTML=`<div class="search" style="margin-top:0">${ic('search',22)}<input placeholder="User ID (empty = first 300 rows)" value="${esc(u)}" onchange="aUd(this.value)"></div>`+(r.map(x=>`<div class="card"><div class="row"><b class="mono g" style="color:#a78bfa">${esc(x.name)}</b><span class="mut mono">${x.user_id}</span></div><pre class="err" style="color:#d6d6de">${esc(typeof x.value=='string'?x.value:JSON.stringify(x.value,null,1)).slice(0,1500)}</pre></div>`).join('')||'<div class="empty">No user data (User.saveData)</div>')}
+/* ---------------- Bot settings */
+async function bset(){$('#fl').innerHTML='';const b=S.bot=await api('/api/bots/'+S.bot.id),tok=b.token;
+ $('#pane').innerHTML=`<div class="card"><div class="lbl">Bot ID</div><div class="row search" style="margin:0;height:58px;border-radius:14px;background:var(--card2)"><span class="mono g" style="font-size:21px">${b.id}</span><button class="ib" onclick="copy('${b.id}')">${ic('copy',24)}</button></div></div>
+ <div class="card"><div class="lbl">Bot token</div><div class="row search" style="margin:0;height:58px;border-radius:14px;background:var(--card2)"><span class="mono g" id="tk" style="font-size:19px;overflow:hidden;white-space:nowrap">${'•'.repeat(34)}</span><button class="ib" onclick="copy('${tok}')">${ic('copy',24)}</button><button class="ib" onclick="const e=$('#tk');e.dataset.v=e.dataset.v?'':'1';e.textContent=e.dataset.v?'${tok}':'${'•'.repeat(34)}'">${ic('eye',24)}</button></div></div>
+ <div class="card"><div class="lbl">Update token</div><div class="row"><input class="f" id="nt" placeholder="New token"><button class="btn" onclick="setTok()">Update</button></div></div>
+ <div class="card"><div class="lbl">Test a command</div><input class="f" id="tu" placeholder="Telegram user ID (must have started the bot)" inputmode="numeric"><input class="f" id="tt" style="margin-top:8px" placeholder="/start or any text"><p><button class="btn full" onclick="runTest()">Run</button></p><pre class="err" id="to" style="color:#d6d6de;display:none"></pre><p class="hint">Runs for real: messages go to that Telegram user.</p></div>
+ <div class="card"><button class="btn bad full" onclick="delBot()">${ic('trash',22)} Delete bot (permanent)</button></div>`}
+async function setTok(){try{await api(`/api/bots/${S.bot.id}/token`,{method:'POST',body:{token:$('#nt').value.trim()}});toast('Token updated');bset()}catch(e){toast(e.message,1)}}
+async function runTest(){try{const r=await api(`/api/bots/${S.bot.id}/test`,{method:'POST',body:{user_id:$('#tu').value,text:$('#tt').value}});const o=$('#to');o.style.display='block';o.textContent=r.errors.length?r.errors.map(e=>e.command+': '+e.error).join('\n\n'):'No runtime errors were recorded.'}catch(e){toast(e.message,1)}}
+async function delBot(){if(prompt('Type @username to confirm deletion: @'+S.bot.username)!==S.bot.username)return;await api('/api/bots/'+S.bot.id,{method:'DELETE'});S.bot=null;S.nav='bots';go()}
+/* ---------------- Global pages */
+async function backup(){$('#app').innerHTML=`<h2 class="pg" style="margin-bottom:18px">Backup</h2><div class="card"><div class="lbl">All bots</div><p class="hint" style="font-size:19px">One JSON with every bot: token, commands, users, bot data and user data. Keep it private (it contains bot tokens).</p><button class="btn full" onclick="dl('/api/backup-all','selftbc_all_bots.json')">${ic('dl',22)} Download backup</button><p><button class="btn sec full" onclick="restoreAll()">${ic('up',22)} Restore backup</button></p></div>
+ <div class="card"><div class="lbl">Auto-backup to Telegram</div><p class="hint" style="font-size:18px">Set env vars on the server: <span class="mono">SELFTBC_BACKUP_CHAT=&lt;your Telegram id&gt;</span> and <span class="mono">SELFTBC_BACKUP_HOURS=6</span>. The first bot sends you the backup file. Essential on free hosts with a temporary disk.</p></div>`}
+async function restoreAll(){const t=await pick('.json');try{const r=await api('/api/restore-all',{method:'POST',body:t});toast(JSON.stringify(r))}catch(e){toast(e.message,1)}}
+async function settings(){const o=await api('/api/overview');$('#app').innerHTML=`<h2 class="pg" style="margin-bottom:18px">Settings</h2><div class="card" style="padding:4px 16px"><div class="kv"><span>Bots running</span><span class="v">${o.running} / ${o.bots}</span></div><div class="kv"><span>Database size</span><span class="v">${o.db_mb} MB</span></div><div class="kv"><span>Errors logged</span><span class="v">${o.errors}</span></div></div><div class="card"><div class="lbl">Dashboard access</div><p class="hint" style="font-size:18px">The dashboard key is the <span class="mono">SELFTBC_KEY</span> environment variable on your server. Change it there and restart.</p><button class="btn sec full" onclick="localStorage.removeItem('key');location.reload()">Log out</button></div>`}
+async function more(){$('#app').innerHTML=`<h2 class="pg" style="margin-bottom:18px">More</h2><div class="card" style="padding:4px 16px"><div class="kv lnk" onclick="window.open('https://help.telebotcreator.com','_blank')"><span>TPY documentation</span><span class="v">${ic('r',22)}</span></div><div class="kv lnk" onclick="S.nav='backup';go()"><span>Backup &amp; restore</span><span class="v">${ic('r',22)}</span></div><div class="kv lnk" onclick="localStorage.removeItem('key');KEY='';location.reload()"><span>Log out</span><span class="v">${ic('r',22)}</span></div><div class="kv"><span>SelfTBC</span><span class="v">v1.1</span></div></div>`}
+api('/api/ping').then(p=>p.auth_required&&!KEY?login():go());
+</script></body></html>
