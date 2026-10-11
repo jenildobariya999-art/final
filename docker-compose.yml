@@ -1,0 +1,8 @@
+services:
+  selftbc:
+    build: .
+    restart: always
+    ports: ["127.0.0.1:8080:8080"]   # put nginx/caddy with HTTPS in front
+    environment:
+      SELFTBC_KEY: "change-me-long-random-key"
+    volumes: ["./data:/data"]

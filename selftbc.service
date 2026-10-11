@@ -1,0 +1,18 @@
+[Unit]
+Description=SelfTBC
+After=network-online.target
+
+[Service]
+User=selftbc
+WorkingDirectory=/opt/selftbc
+Environment=SELFTBC_KEY=change-me-long-random-key
+Environment=SELFTBC_DB=/opt/selftbc/data/selftbc.db
+ExecStart=/opt/selftbc/venv/bin/python -m selftbc --host 127.0.0.1 --port 8080
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=full
+ReadWritePaths=/opt/selftbc/data
+
+[Install]
+WantedBy=multi-user.target
